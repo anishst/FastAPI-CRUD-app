@@ -17,5 +17,9 @@
     - [FastAPI Github](https://github.com/tiangolo/fastapi)
     - [SQL (Relational) Databases](https://fastapi.tiangolo.com/tutorial/sql-databases/)
 - [uvicorn](https://www.uvicorn.org/)
+- [MongoDB Python Drivers](https://docs.mongodb.com/drivers/python/)
+- [Motor: Asynchronous Python driver for MongoDB](https://motor.readthedocs.io/en/stable/)
+  - https://motor.readthedocs.io/en/stable/tutorial-asyncio.html#creating-a-client
 - Articles
   - [Python REST APIs with FastAPI, CRUD application](https://dev.to/xarala221/python-rest-apis-with-fastapi-crud-application-9kc)
+  - [Getting Started with MongoDB and FastAPI](https://www.mongodb.com/developer/quickstart/python-quickstart-fastapi/)
