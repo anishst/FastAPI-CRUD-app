@@ -10,7 +10,17 @@ app = FastAPI()
 def read_root():
     return {"message": "Welcome to my very Basic FastAPI!"}
 
-postdb = []
+postdb = [
+    {
+  "id": 1,
+  "title": "Getting started with FastAPI",
+  "author": "Anish Sebastian",
+  "content": "Hello FastAPI!",
+  "created_at": datetime.now(),
+  "published_at": datetime.now(),
+  "published": bool("true"),
+}
+]
 
 # post model
 class Post(BaseModel):
@@ -38,7 +48,7 @@ def get_post(post_id: int):
     return postdb[post]   
 
 # update post
-@app.post("/blog/{post_id}")
+@app.put("/blog/{post_id}")
 def update_post(post_id: int, post: Post):
     postdb[post_id] = post
     return {"message": "Post has been updated succesfully"} 
