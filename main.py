@@ -1,60 +1,83 @@
-from fastapi import FastAPI
+# https://codingnomads.co/blog/python-fastapi-tutorial
+from fastapi import FastAPI, Depends
 from pydantic import BaseModel
-from typing import Optional, Text
-from datetime import datetime
+from typing import Optional, List
+from sqlalchemy import create_engine
+from sqlalchemy.orm import declarative_base, sessionmaker, Session
+from sqlalchemy import Boolean, Column, Float, String, Integer
 
 app = FastAPI()
 
+# SqlAlchemy Setup
+SQLALCHEMY_DATABASE_URL = 'sqlite+pysqlite:///./db.sqlite3:'
+engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True, future=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
 
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to my very Basic FastAPI!"}
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-postdb = [
-    {
-  "id": 1,
-  "title": "Getting started with FastAPI",
-  "author": "Anish Sebastian",
-  "content": "Hello FastAPI!",
-  "created_at": datetime.now(),
-  "published_at": datetime.now(),
-  "published": bool("true"),
-}
-]
+# A SQLAlchemny ORM Place
+class DBPlace(Base):
+    __tablename__ = 'places'
 
-# post model
-class Post(BaseModel):
-    id: int
-    title: str
-    author: str
-    content: Text
-    created_at: datetime = datetime.now()
-    published_at: datetime
-    published: Optional[bool] = False
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(50))
+    description = Column(String, nullable=True)
+    coffee = Column(Boolean)
+    wifi = Column(Boolean)
+    food = Column(Boolean)
+    lat = Column(Float)
+    lng = Column(Float)
 
-# route to view all posts.
-@app.get("/blog")
-def get_posts():
-    return postdb
+Base.metadata.create_all(bind=engine)
 
-@app.post("/blog")
-def add_post(post: Post):
-    postdb.append(post.dict())
-    return postdb[-1]
+# A Pydantic Place
+class Place(BaseModel):
+    name: str
+    description: Optional[str] = None
+    coffee: bool
+    wifi: bool
+    food: bool
+    lat: float
+    lng: float
 
-@app.get("/blog/{post_id}")
-def get_post(post_id: int):
-    post = post_id - 1
-    return postdb[post]   
+    class Config:
+        orm_mode = True
 
-# update post
-@app.put("/blog/{post_id}")
-def update_post(post_id: int, post: Post):
-    postdb[post_id] = post
-    return {"message": "Post has been updated succesfully"} 
+# Methods for interacting with the database
+def get_place(db: Session, place_id: int):
+    return db.query(DBPlace).where(DBPlace.id == place_id).first()
 
-# delete post
-@app.delete("/blog/{post_id}")
-def delete_post(post_id: int):
-    postdb.pop(post_id-1)
-    return {"message": "Post has been deleted succesfully"}
+def get_places(db: Session):
+    return db.query(DBPlace).all()
+
+def create_place(db: Session, place: Place):
+    db_place = DBPlace(**place.dict())
+    db.add(db_place)
+    db.commit()
+    db.refresh(db_place)
+
+    return db_place
+
+# Routes for interacting with the API
+@app.post('/places/', response_model=Place)
+def create_places_view(place: Place, db: Session = Depends(get_db)):
+    db_place = create_place(db, place)
+    return db_place
+
+@app.get('/places/', response_model=List[Place])
+def get_places_view(db: Session = Depends(get_db)):
+    return get_places(db)
+
+@app.get('/place/{place_id}')
+def get_place_view(place_id: int, db: Session = Depends(get_db)):
+    return get_place(db, place_id)
+
+@app.get('/')
+async def root():
+    return {'message': 'Hello World!'}
