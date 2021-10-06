@@ -11,9 +11,18 @@
 - run app from command line: ``` uvicorn app.main:app --reload --host=0.0.0.0```
 
 ## Run with Docker Compose
+
+simple app:
 1. create dockerfile and docker compose
 2. build: ```docker-compose build```
 3. run container: ```docker-compose up -d```
+
+Mongo app:
+1. run container using specific docker compose file: ```docker-compose -f docker-compose_mongo.yml up```
+## REST Endpoint Docs
+
+- [Swagger UI](http://192.168.1.25:8000/docs)
+- [Redocs UI](http://192.168.1.25:8000/redoc)
 
 ## Test Mongo App using Curl
 - launch app: ```uvicorn app_mongo.main:app --reload --host=0.0.0.0```

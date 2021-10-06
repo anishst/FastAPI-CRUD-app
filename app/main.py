@@ -7,6 +7,8 @@ from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from sqlalchemy import Boolean, Column, Float, String, Integer
 import pymongo
 import json
+import requests
+import subprocess
 import os
 from bson import json_util
 from dotenv import load_dotenv # https://pypi.org/project/python-dotenv/
@@ -102,3 +104,26 @@ def get_flight_prices():
 @app.get('/')
 async def root():
     return {'message': 'Hello World!'}
+
+@app.get('/joke')
+async def joke():
+    try:
+        url = 'https://icanhazdadjoke.com/'
+        joke = subprocess.check_output(['curl', '-s', url]).decode('ascii')
+        print(joke)
+        return {"joke": joke}
+    except Exception as e:
+        joke="Unable to get the joke"
+        print("Something went wrong getting joke")
+        return {"joke": f"Something went wrong {e}"}
+
+@app.get("/quotes")
+async def quotes(skip: int = 0, limit: int = 10):
+    # https://fastapi.tiangolo.com/tutorial/query-params/
+    # https://premium.zenquotes.io/zenquotes-documentation/#api-structure
+    # https://zenquotes.io/api/quotes
+    response = requests.get("https://type.fit/api/quotes")
+    # data format: text, author; access data["text"]
+    data = response.json()
+    return data[skip : skip + limit]
+
