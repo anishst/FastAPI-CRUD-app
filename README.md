@@ -1,4 +1,8 @@
-# FastAPI REST App with MongoDB
+# FastAPI REST App
+
+
+- **app** folder contains simple FastAPI using sqlite
+- **app_mongo** folder contains simple FastAPI using mongodb
 
 ## Run Locally - Linux
 - create virtual env: ```python3 -m venv venv```
@@ -11,7 +15,8 @@
 2. build: ```docker-compose build```
 3. run container: ```docker-compose up -d```
 
-## Test using Curl
+## Test Mongo App using Curl
+- launch app: ```uvicorn app_mongo.main:app --reload --host=0.0.0.0```
 - get all: ```curl -X GET http://192.168.1.25:8000/blog```
 - get by id: ```curl -X GET http://192.168.1.25:8000/blog/1```
 - add a new post : ```curl -d '{"id": 2, "title": "Adding with Curl", "author": "Anish Sebastian", "content": "I was added via curl post!", "created_at": "2021-03-01T18:17:45.194020", "published_at": "2021-03-01T18:17:58.887Z", "published": true}' -H "Content-Type: application/json" -X POST http://192.168.1.25:8000/blog```

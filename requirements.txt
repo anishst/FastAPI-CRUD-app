@@ -3,3 +3,4 @@ uvicorn
 sqlalchemy
 pymongo
 python-dotenv
+motor           # for app_mongo
