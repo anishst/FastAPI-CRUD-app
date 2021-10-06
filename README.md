@@ -4,7 +4,12 @@
 - create virtual env: ```python3 -m venv venv```
 - activate: ```source venv/bin/activate```
 - install required dependencies: ```pip install -r requirements.txt```
-- run app from command line: ``` uvicorn main:app --reload --host=0.0.0.0```
+- run app from command line: ``` uvicorn app.main:app --reload --host=0.0.0.0```
+
+## Run with Docker Compose
+1. create dockerfile and docker compose
+2. build: ```docker-compose build```
+3. run container: ```docker-compose up -d```
 
 ## Test using Curl
 - get all: ```curl -X GET http://192.168.1.25:8000/blog```
@@ -23,3 +28,4 @@
 - Articles
   - [Python REST APIs with FastAPI, CRUD application](https://dev.to/xarala221/python-rest-apis-with-fastapi-crud-application-9kc)
   - [Getting Started with MongoDB and FastAPI](https://www.mongodb.com/developer/quickstart/python-quickstart-fastapi/)
+  - [Dockerizing FastAPI with Postgres, Uvicorn, and Traefik](https://testdriven.io/blog/fastapi-docker-traefik/)

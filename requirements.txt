@@ -1,3 +1,5 @@
 fastapi
 uvicorn
 sqlalchemy
+pymongo
+python-dotenv
