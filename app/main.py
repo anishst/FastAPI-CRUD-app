@@ -10,6 +10,7 @@ import json
 import requests
 import subprocess
 import os
+import pandas as pd
 from bson import json_util
 from dotenv import load_dotenv # https://pypi.org/project/python-dotenv/
 # load env vars - https://www.twilio.com/blog/environment-variables-python
@@ -127,3 +128,9 @@ async def quotes(skip: int = 0, limit: int = 10):
     data = response.json()
     return data[skip : skip + limit]
 
+@app.get('/dict')
+async def dict():
+    # df = pd.read_excel('app/data/english_dictionary.xlsx',nrows= 20)
+    # return df.head().to_json(indent=2)
+    df = pd.read_csv('app/data/english_dictionary.csv')
+    return df.tail(2).to_json()
