@@ -6,10 +6,12 @@ from pydantic import BaseModel
 from typing import Optional, Text, List
 from datetime import datetime
 import motor.motor_asyncio
+import requests
+import random
 
 app = FastAPI()
 # db connection
-client = motor.motor_asyncio.AsyncIOMotorClient('192.168.1.50')
+client = motor.motor_asyncio.AsyncIOMotorClient('mongodb://192.168.1.50:27017')
 db = client.fastapiblog
 
 
@@ -17,6 +19,26 @@ db = client.fastapiblog
 def read_root():
     return {"message": "Welcome to my very Basic FastAPI!"}
 
+@app.get("/quotes")
+async def quotes(skip: int = 0, limit: int = 10):
+    # https://fastapi.tiangolo.com/tutorial/query-params/
+    # https://premium.zenquotes.io/zenquotes-documentation/#api-structure
+    # https://zenquotes.io/api/quotes
+    response = requests.get("https://type.fit/api/quotes")
+    # data format: text, author; access data["text"]
+    data = response.json()
+    return data[skip : skip + limit]
+
+@app.get("/random_quote")
+def random_quote():
+    try:
+        response = requests.get("https://type.fit/api/quotes")
+        quotes = response.json()
+        rand_quote = quotes[random.randint(0, len(quotes))]
+        return rand_quote
+    except:
+        print("Something went wrong with getting random quote!")
+        return None
 
 # post model
 class Post(BaseModel):
