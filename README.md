@@ -35,10 +35,27 @@ simple app:
 
 
 ## Postgress app:
-1. run container using specific docker compose file: ```docker-compose -f docker-compose_mongo.yml up```
+
+Build the images and run the containers:
+
+```sh
+$ docker-compose up -d --build
+```
+Test out the following routes:
+
+1. [http://192.168.1.25:8002/ping](http://192.168.1.25:8002/ping)
+1. [http://192.168.1.25:8002/docs](http://192.168.1.25:8002/docs)
+1. [http://192.168.1.25:8002/notes](http://192.168.1.25:8002/notes)
+
+Run Pytest: ```docker-compose exec web pytest .```
+
+Source:[Developing and Testing an Asynchronous API with FastAPI and Pytest](https://testdriven.io/blog/fastapi-crud/)
+
+Other examples:
 - [Video](https://www.youtube.com/watch?v=ToXOb-lpipM&t=17011s)
+- [API Video](https://www.youtube.com/watch?v=0sOvCWFmrtA&t=43156s)
     - [Git Repo](https://github.com/Sanjeev-Thiyagarajan/fastapi-course)
-    
+
 ## Resources
 - FastAPI Main Docs:
     - [FastAPI Github](https://github.com/tiangolo/fastapi)
