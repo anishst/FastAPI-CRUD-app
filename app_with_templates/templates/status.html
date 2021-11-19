@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Status</title>
+    <style media="screen">
+      .centered {
+        position: absolute; /* or absolute */
+        top: 50%;
+        left: 50%;
+        transform:translate(-50%, -50%);
+      }
+      body {
+        background-color: black;
+      }
+      h1, div {
+        color: white;
+        text-align:center;
+        }
+    </style>
+  </head>
+  <body class="centered">
+    <h1>Umbrella Status of {{status.city}}, NYC</h1>
+    <div>
+      {% if status.bring_umbrella %}
+        <h4>You need Umbrella</h4>
+        <h4>{{status.temp}}</h4>
+        <h4>{{status.weather}}</h4>
+      {% else %}
+        <h4>You do not need an Umbrella</h4>
+        <h4>{{status.temp}} Celcius</h4>
+        <h4>{{status.description}}</h4>
+      {% endif %}
+    </div>
+  </body>
+</html>
